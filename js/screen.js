@@ -4,17 +4,16 @@ class Screen {
     this.rows = 32;
     this.cols = 64;
 
-    // initialize canvas element
     this.canvasElement = document.querySelector('canvas');
     this.canvasElement.width = this.cols * this.scale; // screen width in px
     this.canvasElement.height = this.rows * this.scale; // screen height in px
 
     this.canvas = this.canvasElement.getContext('2d');
 
-    this.pixelArr = new Array(this.cols * this.rows); // array of all pixels
+    this.pixelArr = new Array(this.cols * this.rows).fill(0); // array of all pixels
   }
 
-  setPixel(x, y) {
+  togglePixel(x, y) {
     [x, y] = this.#normalizePixel(x, y);
     let pixel = x + (y * this.cols);
 
@@ -24,11 +23,11 @@ class Screen {
   }
 
   clear() {
-    this.pixelArr = new Array(this.cols * this.rows);
+    this.pixelArr.fill(false);
   }
 
   refresh() {
-    this.canvas.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height); // clear screen
+    this.canvas.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height); // clear canvas
 
     this.pixelArr.forEach((pixel, index) => {
       if (pixel) {
@@ -44,9 +43,9 @@ class Screen {
     })
   }
 
-  //
-  // private
-  //
+  ///
+  /// private
+  ///
 
   // wraps out of bound pixels
   #normalizePixel(x, y) {
