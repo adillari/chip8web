@@ -1,15 +1,15 @@
-class Renderer {
+class Screen {
   constructor(scale) {
     this.scale = scale;
     this.rows = 32;
     this.cols = 64;
 
     // initialize canvas element
-    this.canvas = document.querySelector('canvas');
-    this.canvas.width = this.cols * this.scale; // screen width in px
-    this.canvas.height = this.rows * this.scale; // screen height in px
+    this.canvasElement = document.querySelector('canvas');
+    this.canvasElement.width = this.cols * this.scale; // screen width in px
+    this.canvasElement.height = this.rows * this.scale; // screen height in px
 
-    this.screen = this.canvas.getContext('2d');
+    this.canvas = this.canvasElement.getContext('2d');
 
     this.pixelArr = new Array(this.cols * this.rows); // array of all pixels
   }
@@ -27,9 +27,8 @@ class Renderer {
     this.pixelArr = new Array(this.cols * this.rows);
   }
 
-  // refresh the screen
-  render() {
-    this.screen.clearRect(0, 0, this.canvas.width, this.canvas.height); // clear screen
+  refresh() {
+    this.canvas.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height); // clear screen
 
     this.pixelArr.forEach((pixel, index) => {
       if (pixel) {
@@ -39,15 +38,10 @@ class Renderer {
         x *= this.scale;
         y *= this.scale;
 
-        this.screen.fillStyle = '#E879F9';
-        this.screen.fillRect(x, y, this.scale, this.scale);
+        this.canvas.fillStyle = '#E879F9';
+        this.canvas.fillRect(x, y, this.scale, this.scale);
       }
     })
-  }
-
-  testRender() {
-    this.setPixel(0, 0);
-    this.setPixel(5, 2);
   }
 
   //
@@ -65,4 +59,4 @@ class Renderer {
   }
 }
 
-export default Renderer;
+export default Screen;
