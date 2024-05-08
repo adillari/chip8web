@@ -1,5 +1,5 @@
 class Renderer {
-  constuctor(scale) {
+  constructor(scale) {
     this.scale = scale;
     this.rows = 32;
     this.cols = 64;
@@ -39,7 +39,7 @@ class Renderer {
         x *= this.scale;
         y *= this.scale;
 
-        this.screen.fillStyle = '#000';
+        this.screen.fillStyle = '#E879F9';
         this.screen.fillRect(x, y, this.scale, this.scale);
       }
     })
