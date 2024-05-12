@@ -1,21 +1,21 @@
 class Screen {
   constructor(scale) {
-    this.scale = scale;
-    this.rows = 32;
-    this.cols = 64;
+    this.SCALE = scale;
+    this.ROWS = 32;
+    this.COLS = 64;
 
     this.canvasElement = document.querySelector('canvas');
-    this.canvasElement.width = this.cols * this.scale; // screen width in px
-    this.canvasElement.height = this.rows * this.scale; // screen height in px
+    this.canvasElement.width = this.COLS * this.SCALE; // screen width in px
+    this.canvasElement.height = this.ROWS * this.SCALE; // screen height in px
 
     this.canvas = this.canvasElement.getContext('2d');
 
-    this.pixelArr = new Array(this.cols * this.rows).fill(0); // array of all pixels
+    this.pixelArr = new Array(this.COLS * this.ROWS).fill(0); // array of all pixels
   }
 
   togglePixel(x, y) {
     [x, y] = this.#normalizePixel(x, y);
-    let pixel = x + (y * this.cols);
+    let pixel = x + (y * this.COLS);
 
     this.pixelArr[pixel] ^= 1; // flip pixel
 
@@ -31,14 +31,14 @@ class Screen {
 
     this.pixelArr.forEach((pixel, index) => {
       if (pixel) {
-        let x = index % this.cols;
-        let y = Math.floor(index / this.cols);
+        let x = index % this.COLS;
+        let y = Math.floor(index / this.COLS);
 
-        x *= this.scale;
-        y *= this.scale;
+        x *= this.SCALE;
+        y *= this.SCALE;
 
         this.canvas.fillStyle = '#E879F9';
-        this.canvas.fillRect(x, y, this.scale, this.scale);
+        this.canvas.fillRect(x, y, this.SCALE, this.SCALE);
       }
     })
   }
@@ -49,10 +49,10 @@ class Screen {
 
   // wraps out of bound pixels
   #normalizePixel(x, y) {
-    if (x > this.cols) x -= this.cols;
-    if (x < 0) x += this.cols;
-    if (y > this.rows) y -= this.rows;
-    if (y < 0) y += this.rows;
+    if (x > this.COLS) x -= this.COLS;
+    if (x < 0) x += this.COLS;
+    if (y > this.ROWS) y -= this.ROWS;
+    if (y < 0) y += this.ROWS;
 
     return [x, y];
   }
