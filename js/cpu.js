@@ -16,6 +16,23 @@ class CPU {
     this.SPEED = 10;
   }
 
+  cycle() {
+    for (let i = 0; i < this.SPEED; i++) {
+      if (!this.PAUSED) {
+        let opcode = (this.MEMORY[this.PC] << 8 | this.MEMORY[this.PC + 1]);
+        this.executeInstruction(opcode)
+      }
+    }
+
+    if (!this.PAUSED) {
+      this.updateTimers();
+    }
+
+    this.playSound();
+    this.SCREEN.refresh();
+  }
+
+
   loadRom(filename) {
     var request = new XMLHttpRequest;
     var self = this;
