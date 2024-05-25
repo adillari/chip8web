@@ -25,16 +25,11 @@ class CPU {
     }
 
     if (!this.PAUSED) {
-      this.updateTimers();
+      this.#updateTimers();
     }
 
-    this.playSound();
+    this.#playSound();
     this.SCREEN.refresh();
-  }
-
-  updateTimers() {
-    if (this.DT > 0) { this.DT -= 1; }
-    if (this.ST > 0) { this.ST -= 1; }
   }
 
   loadRom(filename) {
@@ -83,6 +78,37 @@ class CPU {
     SPRITES.forEach((byte, index) => {
       this.MEMORY[index] = byte;
     });
+  }
+
+  //
+  // private
+  //
+
+  executeInstruction(opcode) {
+    this.PC += 2;
+
+    let x = (opcode & 0x0F00) >> 8;
+    let y = (opcpde & 0x00F0) >> 4;
+    
+    switch(opcode & 0xF000) {
+      case 0x0000:
+        break;
+      default:
+        throw new Error('Unknown opcode ' + opcode);
+    }
+  }
+
+  #updateTimers() {
+    if (this.DT > 0) { this.DT -= 1; }
+    if (this.ST > 0) { this.ST -= 1; }
+  }
+
+  #playSound() {
+    if (this.soundTimer > 0) {
+      this.speaker.play(440);
+    } else {
+      this.speaker.stop();
+    }
   }
 }
 
