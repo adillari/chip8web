@@ -32,6 +32,10 @@ class CPU {
     this.SCREEN.refresh();
   }
 
+  updateTimers() {
+    if (this.DT > 0) { this.DT -= 1; }
+    if (this.ST > 0) { this.ST -= 1; }
+  }
 
   loadRom(filename) {
     var request = new XMLHttpRequest;
