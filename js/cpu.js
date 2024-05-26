@@ -276,6 +276,12 @@ class CPU {
             this.MEMORY[this.I+1] = parseInt((this.V[x] % 100) / 10);
             this.MEMORY[this.I+2] = parseInt(this.V[x] % 10);
             break;
+
+          case 0x55: // LD [I], Vx
+            for(registerIndex=0; registerIndex<=x; registerIndex++) {
+              this.MEMORY[this.I+registerIndex] = this.V[registerIndex];
+            }
+            break;
         }
         break;
 
