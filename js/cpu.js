@@ -270,6 +270,12 @@ class CPU {
             // at the 75th byte of memory(this.MEMORY[0x04B]).
             this.I = this.V[x] * 5;
             break;
+
+          case 0x33: // LD B, Vx
+            this.MEMORY[this.I] = parseInt(this.V[x] / 100);
+            this.MEMORY[this.I+1] = parseInt((this.V[x] % 100) / 10);
+            this.MEMORY[this.I+2] = parseInt(this.V[x] % 10);
+            break;
         }
         break;
 
