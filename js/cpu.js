@@ -212,8 +212,12 @@ class CPU {
         }
         break;
 
-      case 0xE000:
+      case 0xE000: // SKP Vx
+        if (this.KEYBOARD.isKeyPressed(this.V[x])) {
+          this.PC += 2;
+        }
         break;
+
       case 0xF000:
         break;
       default:
