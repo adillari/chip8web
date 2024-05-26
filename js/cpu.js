@@ -99,8 +99,10 @@ class CPU {
           case: 0x00EE: // RET
             this.PC = this.STACK.pop();
             break;
+        }
         break;
       case 0x1000:
+        this.PC = opcode & 0xFFF;
         break;
       case 0x2000:
         break;
