@@ -252,6 +252,10 @@ class CPU {
             this.DT = this.V[x];
             break;
 
+          case 0x18: // LD ST, Vx
+            this.ST = this.V[x];
+            break;
+
         }
         break;
 
