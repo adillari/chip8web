@@ -247,6 +247,11 @@ class CPU {
               this.PAUSED = false;
             }.bind(this);
             break;
+
+          case 0x15: // LD DT, Vx
+            this.DT = this.V[x];
+            break;
+
         }
         break;
 
