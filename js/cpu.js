@@ -102,6 +102,7 @@ class CPU {
             break;
         }
         break;
+
       case 0x1000: // JP addr
         this.PC = opcode & 0xFFF;
         break;
@@ -182,21 +183,26 @@ class CPU {
             break;
         }
         break;
+
       case 0x9000: // SNE Vx, Vy
         if (this.V[x] !== this.V[y]) {
           this.PC += 2;
         }
         break;
+
       case 0xA000: // LD I, addr
         this.I = opcode & 0xFFF;
         break;
+
       case 0xB000: // JP V0, addr
         this.PC = this.V[0x0] + (opcode & 0xFFF);
         break;
+
       case 0xC000: // RND Vx, byte
         let randomByte = Math.floor(Math.random * 0xFF);
         this.V[x] = randomByte & (opcode & 0xFF);
         break;
+
       case 0xD000: // DRW Vx, Vy, nibble
         let spriteCols = 8;
         let spriteRows = opcode & 0xF;
@@ -234,6 +240,13 @@ class CPU {
             this.V[x] = this.DT;
             break;
 
+          case 0x0A: // LD Vx, K
+            this.PAUSED = true;
+            this.KEYBOARD.onNextKeyPress = (key) => {
+              this.V[x] = key;
+              this.PAUSED = false;
+            }.bind(this);
+            break;
         }
         break;
 
