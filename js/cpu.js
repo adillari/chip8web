@@ -130,6 +130,11 @@ class CPU {
         this.V[x] += opcode & 0xFF;
         break;
       case 0x8000:
+        switch(opcode & 0xF) {
+          case(0x0): // LD Vx, Vy
+            this.V[x] = this.V[y];
+            break;
+        }
         break;
       case 0x9000:
         break;
