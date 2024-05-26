@@ -174,7 +174,8 @@ class CPU {
       case 0xA000: // LD I, addr
         this.I = opcode & 0xFFF;
         break;
-      case 0xB000:
+      case 0xB000: // JP V0, addr
+        this.PC = this.V[0x0] + (opcode & 0xFFF);
         break;
       case 0xC000:
         break;
