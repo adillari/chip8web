@@ -126,7 +126,8 @@ class CPU {
       case 0x6000: // LD Vx, byte
         this.V[x] = opcode & 0xFF;
         break;
-      case 0x7000:
+      case 0x7000: // ADD Vx, byte
+        this.V[x] += opcode & 0xFF;
         break;
       case 0x8000:
         break;
