@@ -171,7 +171,8 @@ class CPU {
           this.PC += 2;
         }
         break;
-      case 0xA000:
+      case 0xA000: // LD I, addr
+        this.I = opcode & 0xFFF;
         break;
       case 0xB000:
         break;
