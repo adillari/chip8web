@@ -143,6 +143,13 @@ class CPU {
           case 0x3: // XOR Vx, Vy
             this.V[x] ^= this.V[y];
             break;
+          case 0x4: // ADD Vx, Vy
+            // calculate sum of register values
+            let sum = this.V[x] + this.V[y];
+            // set VF to 1 if sum > 255, else 0
+            this.V[0xF] = sum > 0xFF ? 1 : 0;
+            // set Vx to sum, truncated to 8 bits
+            this.V[x] = sum & 0xFF;
         }
         break;
       case 0x9000:
