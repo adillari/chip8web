@@ -140,6 +140,9 @@ class CPU {
           case 0x2: // AND Vx, Vy
             this.V[x] &= this.V[y];
             break;
+          case 0x3: // XOR Vx, Vy
+            this.V[x] ^= this.V[y];
+            break;
         }
         break;
       case 0x9000:
