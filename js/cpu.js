@@ -219,6 +219,12 @@ class CPU {
               this.PC += 2;
             }
             break;
+
+          case 0xA1: // SKNP Vx
+            if (!this.KEYBOARD.isKeyPressed(this.V[x])) {
+              this.PC += 2;
+            }
+            break;
         }
         break;
 
