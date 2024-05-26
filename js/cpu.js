@@ -123,7 +123,8 @@ class CPU {
           this.PC += 2;
         }
         break;
-      case 0x6000:
+      case 0x6000: // LD Vx, byte
+        this.V[x] = opcode & 0xFF;
         break;
       case 0x7000:
         break;
