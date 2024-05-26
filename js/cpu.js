@@ -159,6 +159,10 @@ class CPU {
             this.V[0xF] = this.V[x] & 0b1;
             this.V[x] >>= 1;
             break;
+          case 0x7: // SUBN Vx, Vy
+            this.V[0xF] = this.V[y] > this.V[x] ? 1 : 0;
+            this.V[x] = this.V[y] - this.V[x];
+            break;
         }
         break;
       case 0x9000:
