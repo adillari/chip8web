@@ -101,10 +101,12 @@ class CPU {
             break;
         }
         break;
-      case 0x1000:
+      case 0x1000: // JP addr
         this.PC = opcode & 0xFFF;
         break;
-      case 0x2000:
+      case 0x2000: // CALL addr
+        this.STACK.push(this.PC);
+        this.PC = opcode & 0xFFF;
         break;
       case 0x3000:
         break;
