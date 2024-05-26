@@ -229,7 +229,14 @@ class CPU {
         break;
 
       case 0xF000:
+        switch(opcode & 0xFF) {
+          case 0x07: // LD Vx, DT
+            this.V[x] = this.DT;
+            break;
+
+        }
         break;
+
       default:
         throw new Error('Unknown opcode ' + opcode);
     }
