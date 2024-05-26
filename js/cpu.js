@@ -259,6 +259,17 @@ class CPU {
           case 0x1E: // ADD I, Vx
             this.I += this.V[x];
             break;
+
+          case 0x29: // LD F, Vx
+            // Vx will come in holding a hex digit, we then load the location
+            // of the corresponding hex sprite into I. The sprites are the first
+            // things we loaded into memory, so we can get the memory address by
+            // multiplying the hex digit by 5, because each sprite is 5 bytes long.
+            //
+            // Example: 0xF * 5 = 0x4B(75), so the sprite for F starts
+            // at the 75th byte of memory(this.MEMORY[0x04B]).
+            this.I = this.V[x] * 5;
+            break;
         }
         break;
 
