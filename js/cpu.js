@@ -150,6 +150,11 @@ class CPU {
             this.V[0xF] = sum > 0xFF ? 1 : 0;
             // set Vx to sum, truncated to 8 bits
             this.V[x] = sum & 0xFF;
+            break;
+          case 0x5: // SUB Vx, Vy
+            this.V[0xF] = this.V[x] > this.X[y] ? 1 : 0;
+            this.V[x] -= this.V[y];
+            break;
         }
         break;
       case 0x9000:
