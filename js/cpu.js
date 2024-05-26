@@ -118,7 +118,10 @@ class CPU {
           this.PC += 2;
         }
         break;
-      case 0x5000:
+      case 0x5000: // SE Vx, Vy
+        if (V[x] === V[y]) {
+          this.PC += 2;
+        }
         break;
       case 0x6000:
         break;
