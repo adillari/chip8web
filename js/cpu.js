@@ -212,9 +212,13 @@ class CPU {
         }
         break;
 
-      case 0xE000: // SKP Vx
-        if (this.KEYBOARD.isKeyPressed(this.V[x])) {
-          this.PC += 2;
+      case 0xE000:
+        switch(opcode & 0xFF) {
+          case 0x9E: // SKP Vx
+            if (this.KEYBOARD.isKeyPressed(this.V[x])) {
+              this.PC += 2;
+            }
+            break;
         }
         break;
 
