@@ -166,7 +166,10 @@ class CPU {
             break;
         }
         break;
-      case 0x9000:
+      case 0x9000: // SNE Vx, Vy
+        if (this.V[x] !== this.V[y]) {
+          this.PC += 2;
+        }
         break;
       case 0xA000:
         break;
