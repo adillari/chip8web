@@ -108,9 +108,15 @@ class CPU {
         this.STACK.push(this.PC);
         this.PC = opcode & 0xFFF;
         break;
-      case 0x3000:
+      case 0x3000: // SE Vx, byte
+        if (this.V[x] === (opcode & 0xFF)) {
+          this.PC += 2;
+        }
         break;
-      case 0x4000:
+      case 0x4000: // SNE Vx, byte
+        if (this.V[x] !== (opcode & 0xFF)) {
+          this.PC += 2;
+        }
         break;
       case 0x5000:
         break;
