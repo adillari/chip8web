@@ -163,6 +163,10 @@ class CPU {
             this.V[0xF] = this.V[y] > this.V[x] ? 1 : 0;
             this.V[x] = this.V[y] - this.V[x];
             break;
+          case 0x8: // SHL Vx {, Vy}
+            this.V[0xF] = this.V[x] & 0x80;
+            this.V[x] <<= 1;
+            break;
         }
         break;
       case 0x9000:
