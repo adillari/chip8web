@@ -96,6 +96,7 @@ class CPU {
           case 0x00E0: // CLS
             this.SCREEN.clear();
             break;
+
           case: 0x00EE: // RET
             this.PC = this.STACK.pop();
             break;
@@ -104,62 +105,77 @@ class CPU {
       case 0x1000: // JP addr
         this.PC = opcode & 0xFFF;
         break;
+
       case 0x2000: // CALL addr
         this.STACK.push(this.PC);
         this.PC = opcode & 0xFFF;
         break;
+
       case 0x3000: // SE Vx, byte
         if (this.V[x] === (opcode & 0xFF)) {
           this.PC += 2;
         }
         break;
+
       case 0x4000: // SNE Vx, byte
         if (this.V[x] !== (opcode & 0xFF)) {
           this.PC += 2;
         }
         break;
+
       case 0x5000: // SE Vx, Vy
         if (V[x] === V[y]) {
           this.PC += 2;
         }
         break;
+
       case 0x6000: // LD Vx, byte
         this.V[x] = opcode & 0xFF;
         break;
+
       case 0x7000: // ADD Vx, byte
         this.V[x] += opcode & 0xFF;
         break;
+
       case 0x8000:
         switch(opcode & 0xF) {
           case 0x0: // LD Vx, Vy
             this.V[x] = this.V[y];
             break;
+
           case 0x1: // OR Vx, Vy
             this.V[x] |= this.V[y];
             break;
+
           case 0x2: // AND Vx, Vy
             this.V[x] &= this.V[y];
             break;
+
           case 0x3: // XOR Vx, Vy
             this.V[x] ^= this.V[y];
             break;
+
           case 0x4: // ADD Vx, Vy
             let sum = this.V[x] + this.V[y];
             this.V[0xF] = sum > 0xFF ? 1 : 0;
             this.V[x] = sum & 0xFF;
             break;
+
           case 0x5: // SUB Vx, Vy
             this.V[0xF] = this.V[x] > this.X[y] ? 1 : 0;
             this.V[x] -= this.V[y];
             break;
+
           case 0x6: // SHR Vx {, Vy}
             this.V[0xF] = this.V[x] & 0b1;
             this.V[x] >>= 1;
             break;
+
           case 0x7: // SUBN Vx, Vy
             this.V[0xF] = this.V[y] > this.V[x] ? 1 : 0;
             this.V[x] = this.V[y] - this.V[x];
             break;
+
           case 0x8: // SHL Vx {, Vy}
             this.V[0xF] = this.V[x] & 0x80;
             this.V[x] <<= 1;
@@ -181,8 +197,21 @@ class CPU {
         let randomByte = Math.floor(Math.random * 0xFF);
         this.V[x] = randomByte & (opcode & 0xFF);
         break;
-      case 0xD000:
+      case 0xD000: // DRW Vx, Vy, nibble
+        let spriteCols = 8;
+        let spriteRows = opcode & 0xF;
+        for(row=0; row<spriteRows; row++) {
+          let byte = this.MEMORY[this.I + row];
+          for(col=0; col<spriteCols; col++) {
+            let bit = (byte >> (7-col)) & 1; // get working bit
+            if (bit) {
+              let erased = this.SCREEN.setPixel(this.V[x]+col, this.V[y]+row);
+              if (erased) { this.V[0xF] = 1; }
+            }
+          }
+        }
         break;
+
       case 0xE000:
         break;
       case 0xF000:
