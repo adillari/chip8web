@@ -256,6 +256,9 @@ class CPU {
             this.ST = this.V[x];
             break;
 
+          case 0x1E: // ADD I, Vx
+            this.I += this.V[x];
+            break;
         }
         break;
 
