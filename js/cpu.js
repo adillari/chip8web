@@ -177,7 +177,9 @@ class CPU {
       case 0xB000: // JP V0, addr
         this.PC = this.V[0x0] + (opcode & 0xFFF);
         break;
-      case 0xC000:
+      case 0xC000: // RND Vx, byte
+        let randomByte = Math.floor(Math.random * 0xFF);
+        this.V[x] = randomByte & (opcode & 0xFF);
         break;
       case 0xD000:
         break;
