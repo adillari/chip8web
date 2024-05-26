@@ -282,6 +282,12 @@ class CPU {
               this.MEMORY[this.I+registerIndex] = this.V[registerIndex];
             }
             break;
+
+          case: 0x65: // LD Vx. [I]
+            for(registerIndex=0; registerIndex<=x, registerIndex++) {
+              this.V[registerIndex] = this.MEMORY[this.I+registerIndex];
+            }
+            break;
         }
         break;
 
