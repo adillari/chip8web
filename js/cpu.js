@@ -35,23 +35,6 @@ class CPU {
     this.SCREEN.refresh();
   }
 
-  loadRom(filename) {
-    var request = new XMLHttpRequest;
-    var self = this;
-
-    request.onload = () => {
-      if (request.response) {
-        let program = new Uint8Array(request.response)
-        console.log(program);
-        self.loadProgramIntoRAM(program);
-      }
-    }
-
-    request.open('GET', `roms/${filename}`);
-    request.responseType = 'arraybuffer';
-    request.send();
-  }
-
   // assumes the program is coming in as an array of bytes
   loadProgramIntoRAM(program) {
     program.forEach((byte, index) => {
