@@ -36,7 +36,7 @@ async function fetchROM(romName) {
 }
 
 window.startMachine = async romName => {
-  arrayBuffer = await fetchROM(romName);
+  let arrayBuffer = await fetchROM(romName);
   if (arrayBuffer[0] === 'error') {
     alert(arrayBuffer[1]);
   } else {
