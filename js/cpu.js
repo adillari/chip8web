@@ -162,8 +162,8 @@ class CPU {
 
           case 0x4: // ADD Vx, Vy
             let sum = this.V[x] + this.V[y];
-            this.V[0xF] = sum > 0xFF ? 1 : 0;
             this.V[x] = sum & 0xFF;
+            this.V[0xF] = sum > 0xFF ? 1 : 0;
             break;
 
           case 0x5: // SUB Vx, Vy
@@ -181,7 +181,7 @@ class CPU {
             this.V[x] = this.V[y] - this.V[x];
             break;
 
-          case 0x8: // SHL Vx {, Vy}
+          case 0xE: // SHL Vx {, Vy}
             this.V[0xF] = this.V[x] & 0x80;
             this.V[x] <<= 1;
             break;
