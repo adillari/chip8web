@@ -22,9 +22,26 @@ function step() {
   requestAnimationFrame(step);
 }
 
-function startMachine(rom) {
-  cpu.loadHexSpritesIntoRAM();
-  cpu.loadRom(rom);
-  requestAnimationFrame(step);
+async function fetchROM(romName) {
+  try {
+    const response = await fetch('roms/' + romName);
+    if (!response.ok) {
+      return ['error', response.statusText];
+    }
+    const arrayBuffer = await response.arrayBuffer();
+    return new Uint8Array(arrayBuffer);
+  } catch (error) {
+    return ['error', error.message];
+  }
+}
+
+window.startMachine = async romName => {
+  arrayBuffer = await fetchROM(romName);
+  if (arrayBuffer[0] === 'error') {
+    alert(arrayBuffer[1]);
+  } else {
+    cpu.loadProgramIntoRAM(arrayBuffer);
+    requestAnimationFrame(step);
+  }
 }
 
