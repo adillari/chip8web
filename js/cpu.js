@@ -167,8 +167,8 @@ class CPU {
             break;
 
           case 0x5: // SUB Vx, Vy
-            this.V[0xF] = this.V[x] > this.V[y] ? 1 : 0;
             this.V[x] -= this.V[y];
+            this.V[0xF] = this.V[y] > this.V[x] + this.V[y] ? 0 : 1;
             break;
 
           case 0x6: // SHR Vx {, Vy}
@@ -177,8 +177,8 @@ class CPU {
             break;
 
           case 0x7: // SUBN Vx, Vy
-            this.V[0xF] = this.V[y] > this.V[x] ? 1 : 0;
             this.V[x] = this.V[y] - this.V[x];
+            this.V[0xF] = this.V[x] > this.V[y] ? 0 : 1;
             break;
 
           case 0xE: // SHL Vx {, Vy}
