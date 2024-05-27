@@ -13,13 +13,14 @@ class CPU {
     this.STACK = new Array();
 
     this.PAUSED = false;
-    this.SPEED = 10;
+    this.SPEED = 6;
   }
 
   cycle() {
     for (let i = 0; i < this.SPEED; i++) {
       if (!this.PAUSED) {
         let opcode = (this.MEMORY[this.PC] << 8 | this.MEMORY[this.PC + 1]);
+        console.log(opcode);
         this.executeInstruction(opcode)
       }
     }
@@ -38,8 +39,9 @@ class CPU {
 
     request.onload = () => {
       if (request.response) {
-        let program = new Uint8Array(request.repsonse)
-        self.loadProgramIntoRAM(program)
+        let program = new Uint8Array(request.response)
+        console.log(program);
+        self.loadProgramIntoRAM(program);
       }
     }
 
@@ -56,7 +58,7 @@ class CPU {
   }
 
   loadHexSpritesIntoRAM() {
-    SPRITES = [
+    const SPRITES = [
       0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
       0x20, 0x60, 0x20, 0x20, 0x70, // 1
       0xF0, 0x10, 0xF0, 0x80, 0xF0, // 2
@@ -88,7 +90,7 @@ class CPU {
     this.PC += 2;
 
     let x = (opcode & 0x0F00) >> 8;
-    let y = (opcpde & 0x00F0) >> 4;
+    let y = (opcode & 0x00F0) >> 4;
     
     switch(opcode & 0xF000) {
       case 0x0000:
@@ -97,7 +99,7 @@ class CPU {
             this.SCREEN.clear();
             break;
 
-          case: 0x00EE: // RET
+          case 0x00EE: // RET
             this.PC = this.STACK.pop();
             break;
         }
@@ -163,7 +165,7 @@ class CPU {
             break;
 
           case 0x5: // SUB Vx, Vy
-            this.V[0xF] = this.V[x] > this.X[y] ? 1 : 0;
+            this.V[0xF] = this.V[x] > this.V[y] ? 1 : 0;
             this.V[x] -= this.V[y];
             break;
 
@@ -206,12 +208,12 @@ class CPU {
       case 0xD000: // DRW Vx, Vy, nibble
         let spriteCols = 8;
         let spriteRows = opcode & 0xF;
-        for(row=0; row<spriteRows; row++) {
+        for(let row=0; row<spriteRows; row++) {
           let byte = this.MEMORY[this.I + row];
-          for(col=0; col<spriteCols; col++) {
+          for(let col=0; col<spriteCols; col++) {
             let bit = (byte >> (7-col)) & 1; // get working bit
             if (bit) {
-              let erased = this.SCREEN.setPixel(this.V[x]+col, this.V[y]+row);
+              let erased = this.SCREEN.togglePixel(this.V[x]+col, this.V[y]+row);
               if (erased) { this.V[0xF] = 1; }
             }
           }
@@ -245,7 +247,7 @@ class CPU {
             this.KEYBOARD.onNextKeyPress = (key) => {
               this.V[x] = key;
               this.PAUSED = false;
-            }.bind(this);
+            };
             break;
 
           case 0x15: // LD DT, Vx
@@ -278,13 +280,13 @@ class CPU {
             break;
 
           case 0x55: // LD [I], Vx
-            for(registerIndex=0; registerIndex<=x; registerIndex++) {
+            for(let registerIndex=0; registerIndex<=x; registerIndex++) {
               this.MEMORY[this.I+registerIndex] = this.V[registerIndex];
             }
             break;
 
-          case: 0x65: // LD Vx. [I]
-            for(registerIndex=0; registerIndex<=x, registerIndex++) {
+          case 0x65: // LD Vx. [I]
+            for(let registerIndex=0; registerIndex<=x; registerIndex++) {
               this.V[registerIndex] = this.MEMORY[this.I+registerIndex];
             }
             break;
@@ -303,9 +305,9 @@ class CPU {
 
   #playSound() {
     if (this.soundTimer > 0) {
-      this.speaker.play(440);
+      this.SPEAKER.play(440);
     } else {
-      this.speaker.stop();
+      this.SPEAKER.stop();
     }
   }
 }
