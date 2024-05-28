@@ -153,8 +153,9 @@ class CPU {
             break;
 
           case 0x6: // SHR Vx {, Vy}
-            this.V[0xF] = this.V[x] & 0b1;
+            let rightmostBit = this.V[x] & 1;
             this.V[x] >>= 1;
+            this.V[0xF] = rightmostBit;
             break;
 
           case 0x7: // SUBN Vx, Vy
@@ -163,8 +164,9 @@ class CPU {
             break;
 
           case 0xE: // SHL Vx {, Vy}
-            this.V[0xF] = this.V[x] & 0x80;
+            let leftmostBit = this.V[x] >> 7;
             this.V[x] <<= 1;
+            this.V[0xF] = leftmostBit;
             break;
         }
         break;
