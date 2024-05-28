@@ -22,7 +22,6 @@ class CPU {
     for (let i = 0; i < this.SPEED; i++) {
       if (!this.PAUSED) {
         let opcode = (this.MEMORY[this.PC] << 8 | this.MEMORY[this.PC + 1]);
-        console.log(opcode);
         this.executeInstruction(opcode)
       }
     }
@@ -150,7 +149,7 @@ class CPU {
 
           case 0x5: // SUB Vx, Vy
             this.V[x] -= this.V[y];
-            this.V[0xF] = this.V[y] > this.V[x] + this.V[y] ? 0 : 1;
+            this.V[0xF] = (this.V[x] + this.V[y] & 0xFF) < this.V[y] ? 0 : 1;
             break;
 
           case 0x6: // SHR Vx {, Vy}
