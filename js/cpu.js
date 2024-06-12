@@ -132,14 +132,17 @@ class CPU {
 
           case 0x1: // OR Vx, Vy
             this.V[x] |= this.V[y];
+            this.V[0xF] = 0;
             break;
 
           case 0x2: // AND Vx, Vy
             this.V[x] &= this.V[y];
+            this.V[0xF] = 0;
             break;
 
           case 0x3: // XOR Vx, Vy
             this.V[x] ^= this.V[y];
+            this.V[0xF] = 0;
             break;
 
           case 0x4: // ADD Vx, Vy
