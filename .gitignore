@@ -2,3 +2,5 @@ roms/*
 !roms/.keep
 node_modules/
 .git/
+output.css
+
