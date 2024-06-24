@@ -1,6 +1,6 @@
-roms/*
-!roms/.keep
+public/roms/*
+!public/roms/.keep
 node_modules/
 .git/
-output.css
+application.css
 
