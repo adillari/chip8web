@@ -1,14 +1,14 @@
-import Screen from './screen.js';
-import Keyboard from './keyboard.js';
-import Speaker from './speaker.js'
-import CPU from './cpu.js'
+import Screen from "./screen.js";
+import Keyboard from "./keyboard.js";
+import Speaker from "./speaker.js";
+import CPU from "./cpu.js";
 
 const screen = new Screen(15);
-const keyboard = new Keyboard;
+const keyboard = new Keyboard();
 const speaker = new Speaker();
 const cpu = new CPU(screen, keyboard, speaker);
 
-let framerate = 1000/60;
+let framerate = 1000 / 60;
 let then = Date.now();
 let now, elapsed;
 
@@ -24,24 +24,23 @@ function step() {
 
 async function fetchROM(romName) {
   try {
-    const response = await fetch('roms/' + romName);
+    const response = await fetch("roms/" + romName);
     if (!response.ok) {
-      return ['error', response.statusText];
+      return ["error", response.statusText];
     }
     const arrayBuffer = await response.arrayBuffer();
     return new Uint8Array(arrayBuffer);
   } catch (error) {
-    return ['error', error.message];
+    return ["error", error.message];
   }
 }
 
-window.startMachine = async romName => {
+window.startMachine = async (romName) => {
   let arrayBuffer = await fetchROM(romName);
-  if (arrayBuffer[0] === 'error') {
+  if (arrayBuffer[0] === "error") {
     alert(arrayBuffer[1]);
   } else {
     cpu.loadProgramIntoRAM(arrayBuffer);
     requestAnimationFrame(step);
   }
-}
-
+};

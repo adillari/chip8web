@@ -21,8 +21,8 @@ class CPU {
   cycle() {
     for (let i = 0; i < this.SPEED; i++) {
       if (!this.PAUSED) {
-        let opcode = (this.MEMORY[this.PC] << 8 | this.MEMORY[this.PC + 1]);
-        this.executeInstruction(opcode)
+        let opcode = (this.MEMORY[this.PC] << 8) | this.MEMORY[this.PC + 1];
+        this.executeInstruction(opcode);
       }
     }
 
@@ -38,10 +38,11 @@ class CPU {
   loadProgramIntoRAM(program) {
     program.forEach((byte, index) => {
       this.MEMORY[0x200 + index] = byte;
-    })
+    });
   }
 
   #loadHexSpritesIntoRAM() {
+    // prettier-ignore
     const SPRITES = [
       0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
       0x20, 0x60, 0x20, 0x20, 0x70, // 1
@@ -73,39 +74,39 @@ class CPU {
   executeInstruction(opcode) {
     this.PC += 2;
 
-    let x = (opcode & 0x0F00) >> 8;
-    let y = (opcode & 0x00F0) >> 4;
-    
-    switch(opcode & 0xF000) {
+    let x = (opcode & 0x0f00) >> 8;
+    let y = (opcode & 0x00f0) >> 4;
+
+    switch (opcode & 0xf000) {
       case 0x0000:
-        switch(opcode) {
-          case 0x00E0: // CLS
+        switch (opcode) {
+          case 0x00e0: // CLS
             this.SCREEN.clear();
             break;
 
-          case 0x00EE: // RET
+          case 0x00ee: // RET
             this.PC = this.STACK.pop();
             break;
         }
         break;
 
       case 0x1000: // JP addr
-        this.PC = opcode & 0xFFF;
+        this.PC = opcode & 0xfff;
         break;
 
       case 0x2000: // CALL addr
         this.STACK.push(this.PC);
-        this.PC = opcode & 0xFFF;
+        this.PC = opcode & 0xfff;
         break;
 
       case 0x3000: // SE Vx, byte
-        if (this.V[x] === (opcode & 0xFF)) {
+        if (this.V[x] === (opcode & 0xff)) {
           this.PC += 2;
         }
         break;
 
       case 0x4000: // SNE Vx, byte
-        if (this.V[x] !== (opcode & 0xFF)) {
+        if (this.V[x] !== (opcode & 0xff)) {
           this.PC += 2;
         }
         break;
@@ -117,59 +118,59 @@ class CPU {
         break;
 
       case 0x6000: // LD Vx, byte
-        this.V[x] = opcode & 0xFF;
+        this.V[x] = opcode & 0xff;
         break;
 
       case 0x7000: // ADD Vx, byte
-        this.V[x] += opcode & 0xFF;
+        this.V[x] += opcode & 0xff;
         break;
 
       case 0x8000:
-        switch(opcode & 0xF) {
+        switch (opcode & 0xf) {
           case 0x0: // LD Vx, Vy
             this.V[x] = this.V[y];
             break;
 
           case 0x1: // OR Vx, Vy
             this.V[x] |= this.V[y];
-            this.V[0xF] = 0;
+            this.V[0xf] = 0;
             break;
 
           case 0x2: // AND Vx, Vy
             this.V[x] &= this.V[y];
-            this.V[0xF] = 0;
+            this.V[0xf] = 0;
             break;
 
           case 0x3: // XOR Vx, Vy
             this.V[x] ^= this.V[y];
-            this.V[0xF] = 0;
+            this.V[0xf] = 0;
             break;
 
           case 0x4: // ADD Vx, Vy
             this.V[x] += this.V[y];
-            this.V[0xF] = this.V[x] < this.V[y] ? 1 : 0;
+            this.V[0xf] = this.V[x] < this.V[y] ? 1 : 0;
             break;
 
           case 0x5: // SUB Vx, Vy
             this.V[x] -= this.V[y];
-            this.V[0xF] = (this.V[x] + this.V[y] & 0xFF) < this.V[y] ? 0 : 1;
+            this.V[0xf] = ((this.V[x] + this.V[y]) & 0xff) < this.V[y] ? 0 : 1;
             break;
 
           case 0x6: // SHR Vx {, Vy}
             let rightmostBit = this.V[x] & 1;
             this.V[x] >>= 1;
-            this.V[0xF] = rightmostBit;
+            this.V[0xf] = rightmostBit;
             break;
 
           case 0x7: // SUBN Vx, Vy
             this.V[x] = this.V[y] - this.V[x];
-            this.V[0xF] = this.V[x] > this.V[y] ? 0 : 1;
+            this.V[0xf] = this.V[x] > this.V[y] ? 0 : 1;
             break;
 
-          case 0xE: // SHL Vx {, Vy}
+          case 0xe: // SHL Vx {, Vy}
             let leftmostBit = this.V[x] >> 7;
             this.V[x] <<= 1;
-            this.V[0xF] = leftmostBit;
+            this.V[0xf] = leftmostBit;
             break;
         }
         break;
@@ -180,43 +181,48 @@ class CPU {
         }
         break;
 
-      case 0xA000: // LD I, addr
-        this.I = opcode & 0xFFF;
+      case 0xa000: // LD I, addr
+        this.I = opcode & 0xfff;
         break;
 
-      case 0xB000: // JP V0, addr
-        this.PC = this.V[0x0] + (opcode & 0xFFF);
+      case 0xb000: // JP V0, addr
+        this.PC = this.V[0x0] + (opcode & 0xfff);
         break;
 
-      case 0xC000: // RND Vx, byte
-        let randomByte = Math.floor(Math.random * 0xFF);
-        this.V[x] = randomByte & (opcode & 0xFF);
+      case 0xc000: // RND Vx, byte
+        let randomByte = Math.floor(Math.random * 0xff);
+        this.V[x] = randomByte & (opcode & 0xff);
         break;
 
-      case 0xD000: // DRW Vx, Vy, nibble
+      case 0xd000: // DRW Vx, Vy, nibble
         let spriteCols = 8;
-        let spriteRows = opcode & 0xF;
-        for(let row=0; row<spriteRows; row++) {
+        let spriteRows = opcode & 0xf;
+        for (let row = 0; row < spriteRows; row++) {
           let byte = this.MEMORY[this.I + row];
-          for(let col=0; col<spriteCols; col++) {
-            let bit = (byte >> (7-col)) & 1; // get working bit
+          for (let col = 0; col < spriteCols; col++) {
+            let bit = (byte >> (7 - col)) & 1; // get working bit
             if (bit) {
-              let erased = this.SCREEN.togglePixel(this.V[x]+col, this.V[y]+row);
-              if (erased) { this.V[0xF] = 1; }
+              let erased = this.SCREEN.togglePixel(
+                this.V[x] + col,
+                this.V[y] + row,
+              );
+              if (erased) {
+                this.V[0xf] = 1;
+              }
             }
           }
         }
         break;
 
-      case 0xE000:
-        switch(opcode & 0xFF) {
-          case 0x9E: // SKP Vx
+      case 0xe000:
+        switch (opcode & 0xff) {
+          case 0x9e: // SKP Vx
             if (this.KEYBOARD.isKeyPressed(this.V[x])) {
               this.PC += 2;
             }
             break;
 
-          case 0xA1: // SKNP Vx
+          case 0xa1: // SKNP Vx
             if (!this.KEYBOARD.isKeyPressed(this.V[x])) {
               this.PC += 2;
             }
@@ -224,13 +230,13 @@ class CPU {
         }
         break;
 
-      case 0xF000:
-        switch(opcode & 0xFF) {
+      case 0xf000:
+        switch (opcode & 0xff) {
           case 0x07: // LD Vx, DT
             this.V[x] = this.DT;
             break;
 
-          case 0x0A: // LD Vx, K
+          case 0x0a: // LD Vx, K
             this.PAUSED = true;
             this.KEYBOARD.onNextKeyPress = (key) => {
               this.V[x] = key;
@@ -246,7 +252,7 @@ class CPU {
             this.ST = this.V[x];
             break;
 
-          case 0x1E: // ADD I, Vx
+          case 0x1e: // ADD I, Vx
             this.I += this.V[x];
             break;
 
@@ -263,32 +269,36 @@ class CPU {
 
           case 0x33: // LD B, Vx
             this.MEMORY[this.I] = parseInt(this.V[x] / 100);
-            this.MEMORY[this.I+1] = parseInt((this.V[x] % 100) / 10);
-            this.MEMORY[this.I+2] = parseInt(this.V[x] % 10);
+            this.MEMORY[this.I + 1] = parseInt((this.V[x] % 100) / 10);
+            this.MEMORY[this.I + 2] = parseInt(this.V[x] % 10);
             break;
 
           case 0x55: // LD [I], Vx
-            for(let registerIndex=0; registerIndex<=x; registerIndex++) {
-              this.MEMORY[this.I+registerIndex] = this.V[registerIndex];
+            for (let registerIndex = 0; registerIndex <= x; registerIndex++) {
+              this.MEMORY[this.I + registerIndex] = this.V[registerIndex];
             }
             break;
 
           case 0x65: // LD Vx. [I]
-            for(let registerIndex=0; registerIndex<=x; registerIndex++) {
-              this.V[registerIndex] = this.MEMORY[this.I+registerIndex];
+            for (let registerIndex = 0; registerIndex <= x; registerIndex++) {
+              this.V[registerIndex] = this.MEMORY[this.I + registerIndex];
             }
             break;
         }
         break;
 
       default:
-        throw new Error('Unknown opcode ' + opcode);
+        throw new Error("Unknown opcode " + opcode);
     }
   }
 
   #updateTimers() {
-    if (this.DT > 0) { this.DT -= 1; }
-    if (this.ST > 0) { this.ST -= 1; }
+    if (this.DT > 0) {
+      this.DT -= 1;
+    }
+    if (this.ST > 0) {
+      this.ST -= 1;
+    }
   }
 
   #playSound() {

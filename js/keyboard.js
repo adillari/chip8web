@@ -8,23 +8,23 @@ class Keyboard {
       81: 0x4, // Q
       87: 0x5, // W
       69: 0x6, // E
-      82: 0xD, // R
+      82: 0xd, // R
       65: 0x7, // A
       83: 0x8, // S
       68: 0x9, // D
-      70: 0xE, // F
-      90: 0xA, // Z
+      70: 0xe, // F
+      90: 0xa, // Z
       88: 0x0, // X
-      67: 0xB, // C
-      86: 0xF  // V
+      67: 0xb, // C
+      86: 0xf, // V
     };
 
     this.keysPressed = [];
 
     this.onNextKeypress = null;
 
-    window.addEventListener('keydown', this.onKeyDown.bind(this), false); // Q: why are we passing false for these?
-    window.addEventListener('keyup', this.onKeyUp.bind(this), false);
+    window.addEventListener("keydown", this.onKeyDown.bind(this), false); // Q: why are we passing false for these?
+    window.addEventListener("keyup", this.onKeyUp.bind(this), false);
   }
 
   isKeyPressed(keyCode) {
