@@ -6,6 +6,7 @@
   },
   "scripts": {
     "build": "npx tailwindcss -i ./css/input.css -o ./css/output.css",
-    "lint": "npx prettier . --write"
+    "lint": "npx prettier ./*.* ./js ./css/input.css --write --log-level debug",
+    "lint:check": "npx prettier ./*.* ./js ./css/input.css --check --log-level debug"
   }
 }
