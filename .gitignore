@@ -3,4 +3,5 @@ public/roms/*
 node_modules/
 .git/
 application.css
-
+dist/*
+!dist/.keep
