@@ -1,3 +1,4 @@
 roms/*
 !roms/.keep
-
+node_modules/
+.git/
