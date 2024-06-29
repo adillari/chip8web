@@ -1,4 +1,9 @@
 class Speaker {
+  audioContext: AudioContext;
+  gain;
+  finish;
+  oscillator;
+
   constructor() {
     this.audioContext = new window.AudioContext();
     this.gain = this.audioContext.createGain();
@@ -11,7 +16,7 @@ class Speaker {
       this.oscillator = this.audioContext.createOscillator();
       this.oscillator.frequency.setValueAtTime(
         frequency || 440,
-        this.audioCtx.currentTime,
+        this.audioContext.currentTime,
       );
       this.oscillator.type = "square";
       this.oscillator.connect(this.gain);

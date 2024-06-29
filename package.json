@@ -1,14 +1,16 @@
 {
   "devDependencies": {
+    "esbuild": "0.21.5",
     "prettier": "^3.3.2",
     "prettier-plugin-tailwindcss": "^0.6.5",
     "tailwindcss": "^3.4.4"
   },
   "scripts": {
-    "build": "npx tsc",
+    "build:front": "npx esbuild src/frontend/main.ts --bundle --minify --target=es2015 --outfile=public/application.js",
+    "build:back": "npx tsc",
     "build:css": "npx tailwindcss -i ./tailwind.css -o ./public/application.css",
-    "lint": "npx prettier . --write --log-level debug",
-    "lint:check": "npx prettier . --check --log-level debug",
+    "lint": "npx prettier . --check --log-level debug",
+    "lint:fix": "npx prettier . --write --log-level debug",
     "start": "node dist/server.js"
   },
   "dependencies": {

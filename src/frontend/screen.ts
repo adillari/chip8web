@@ -1,5 +1,12 @@
 class Screen {
-  constructor(scale) {
+  SCALE: number;
+  ROWS: number;
+  COLS: number;
+  canvasElement: HTMLCanvasElement;
+  canvas: CanvasRenderingContext2D;
+  pixelArr: Array<boolean>;
+
+  constructor(scale: number) {
     this.SCALE = scale;
     this.ROWS = 32;
     this.COLS = 64;
@@ -10,14 +17,14 @@ class Screen {
 
     this.canvas = this.canvasElement.getContext("2d");
 
-    this.pixelArr = new Array(this.COLS * this.ROWS).fill(0); // array of all pixels
+    this.pixelArr = new Array(this.COLS * this.ROWS).fill(false); // array of all pixels
   }
 
   togglePixel(x, y) {
-    [x, y] = this.#normalizePixel(x, y);
+    [x, y] = this.normalizePixel(x, y);
     let pixel = x + y * this.COLS;
 
-    this.pixelArr[pixel] ^= 1; // flip pixel
+    this.pixelArr[pixel] = !this.pixelArr[pixel] // flip pixel
 
     return !this.pixelArr[pixel]; // return true if the pixel was erased
   }
@@ -48,12 +55,8 @@ class Screen {
     });
   }
 
-  ///
-  /// private
-  ///
-
   // wraps out of bound pixels
-  #normalizePixel(x, y) {
+  private normalizePixel(x, y): Array<number> {
     if (x > this.COLS) x -= this.COLS;
     if (x < 0) x += this.COLS;
     if (y > this.ROWS) y -= this.ROWS;

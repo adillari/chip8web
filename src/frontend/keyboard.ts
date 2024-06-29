@@ -1,4 +1,8 @@
 class Keyboard {
+  KEYMAP: { [key: number]: number };
+  keysPressed: boolean[];
+  onNextKeypress: null | ((key: number) => void);
+
   constructor() {
     this.KEYMAP = {
       49: 0x1, // 1
@@ -23,27 +27,29 @@ class Keyboard {
 
     this.onNextKeypress = null;
 
-    window.addEventListener("keydown", this.onKeyDown.bind(this), false); // Q: why are we passing false for these?
-    window.addEventListener("keyup", this.onKeyUp.bind(this), false);
-  }
-
-  isKeyPressed(keyCode) {
-    return this.keysPressed[keyCode];
+    window.addEventListener("keydown", this.onKeyDown.bind(this));
+    window.addEventListener("keyup", this.onKeyUp.bind(this));
   }
 
   onKeyDown(event) {
-    let key = this.KEYMAP[event.which]; // Q: how does event.which work?
+    // event.which is deprecated, look into using KeyboardEvent.key
+    let key = this.KEYMAP[event.which];
     this.keysPressed[key] = true;
 
     if (this.onNextKeypress && key) {
-      this.onNextKeypress(parseInt(key));
+      this.onNextKeypress(+key);
       this.onNextKeypress = null;
     }
   }
 
   onKeyUp(event) {
+    // event.which is deprecated, look into using KeyboardEvent.key
     let key = this.KEYMAP[event.which];
     this.keysPressed[key] = false;
+  }
+
+  isKeyPressed(keyCode) {
+    return this.keysPressed[keyCode];
   }
 }
 

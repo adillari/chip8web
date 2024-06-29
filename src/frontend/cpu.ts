@@ -1,5 +1,18 @@
 class CPU {
-  constructor(screen, keyboard, speaker) {
+  SCREEN: Screen;
+  KEYBOARD: Keyboard;
+  SPEAKER: speaker;
+  MEMORY: Uint8Array;
+  V: Uint8Array;
+  I: number;
+  PC: number;
+  DT: number;
+  ST: number;
+  STACK: number[];
+  PAUSED: boolean;
+  SPEED: number;
+
+  constructor(screen: Screen, keyboard: Keyboard, speaker: Speaker) {
     this.SCREEN = screen;
     this.KEYBOARD = keyboard;
     this.SPEAKER = speaker;
@@ -18,7 +31,7 @@ class CPU {
     this.#loadHexSpritesIntoRAM();
   }
 
-  cycle() {
+  cycle(): void {
     for (let i = 0; i < this.SPEED; i++) {
       if (!this.PAUSED) {
         let opcode = (this.MEMORY[this.PC] << 8) | this.MEMORY[this.PC + 1];
@@ -35,13 +48,13 @@ class CPU {
   }
 
   // assumes the program is coming in as an array of bytes
-  loadProgramIntoRAM(program) {
+  loadProgramIntoRAM(program): void {
     program.forEach((byte, index) => {
       this.MEMORY[0x200 + index] = byte;
     });
   }
 
-  #loadHexSpritesIntoRAM() {
+  #loadHexSpritesIntoRAM(): void {
     // prettier-ignore
     const SPRITES = [
       0xF0, 0x90, 0x90, 0x90, 0xF0, // 0

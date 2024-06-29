@@ -10,7 +10,7 @@ const cpu = new CPU(screen, keyboard, speaker);
 
 let framerate = 1000 / 60;
 let then = Date.now();
-let now, elapsed;
+let now, elapsed: Date;
 
 function step() {
   now = Date.now();
@@ -33,6 +33,11 @@ async function fetchROM(romName) {
   } catch (error) {
     return ["error", error.message];
   }
+}
+
+function loadRom(romname) {
+  let rom: string = document.getElementById("rom-select").value;
+  
 }
 
 window.startMachine = async (romName) => {
