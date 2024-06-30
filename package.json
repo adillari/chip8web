@@ -8,6 +8,7 @@
   "scripts": {
     "start": "node dist/server.js",
     "build": "npm run build:css && npm run build:server && npm run build:client",
+    "health": "npm run lint && npx tsc && npm run client:tsc",
     "lint": "npx prettier . --check --log-level debug",
     "lint:fix": "npx prettier . --write --log-level debug",
     "client:tsc": "npx tsc -noEmit src/frontend/scripts/main.ts",
