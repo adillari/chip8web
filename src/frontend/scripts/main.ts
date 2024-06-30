@@ -36,7 +36,10 @@ async function loadROM() {
   if (arrayBuffer[0] === "error") {
     alert(arrayBuffer[1]);
   } else {
-    machine = new Machine();
+    const quirks: Record<string, boolean> = {
+      originalShiftBehavior: true,
+    };
+    machine = new Machine(quirks);
     machine.loadProgramIntoRAM(arrayBuffer);
     requestAnimationFrame(step);
   }

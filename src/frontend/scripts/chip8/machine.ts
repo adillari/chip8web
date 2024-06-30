@@ -3,6 +3,7 @@ import Keyboard from "./peripherals/keyboard";
 import Speaker from "./peripherals/speaker";
 
 class Machine {
+  QUIRKS: Record<string, boolean>;
   DISPLAY: Display;
   KEYBOARD: Keyboard;
   SPEAKER: Speaker;
@@ -16,7 +17,8 @@ class Machine {
   PAUSED: boolean;
   SPEED: number;
 
-  constructor(displayScale: number = 15) {
+  constructor(quirks: Record<string, boolean>, displayScale: number = 15) {
+    this.QUIRKS = quirks;
     this.DISPLAY = new Display(displayScale);
     this.KEYBOARD = new Keyboard();
     this.SPEAKER = new Speaker();
@@ -169,10 +171,13 @@ class Machine {
             this.V[0xf] = ((this.V[x] + this.V[y]) & 0xff) < this.V[y] ? 0 : 1;
             break;
 
-          case 0x6: // SHR Vx {, Vy}
-            let rightmostBit = this.V[x] & 1;
-            this.V[x] >>= 1;
-            this.V[0xf] = rightmostBit;
+          case 0x6: // SHR Vx ,Vy
+            if (this.QUIRKS.originalShiftBehavior) {
+              this.V[x] = this.V[y]; // copy VY into VX
+            }
+            const rightmostBit = this.V[x] & 1; // grab rightmost bit
+            this.V[x] >>= 1; // shift VX right 1 bit
+            this.V[0xf] = rightmostBit; // store shifted-out bit in flag register(VF)
             break;
 
           case 0x7: // SUBN Vx, Vy
@@ -180,10 +185,13 @@ class Machine {
             this.V[0xf] = this.V[x] > this.V[y] ? 0 : 1;
             break;
 
-          case 0xe: // SHL Vx {, Vy}
-            let leftmostBit = this.V[x] >> 7;
-            this.V[x] <<= 1;
-            this.V[0xf] = leftmostBit;
+          case 0xe: // SHL Vx ,Vy
+            if (this.QUIRKS.originalShiftBehavior) {
+              this.V[x] = this.V[y]; // copy VY into VX
+            }
+            const leftmostBit = this.V[x] >> 7; // grab leftmost bit
+            this.V[x] <<= 1; // shift VX left 1 bit
+            this.V[0xf] = leftmostBit; // store shifted-out bit in flag register(VF)
             break;
         }
         break;
