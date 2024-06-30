@@ -4,7 +4,7 @@ import { readdirSync } from "fs";
 const app: Application = express();
 const port: Number = 7000;
 
-app.set("views", "views");
+app.set("views", "src/frontend/views");
 app.set("view engine", "ejs");
 
 app.use(express.static("public/"));

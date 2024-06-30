@@ -2,13 +2,13 @@
 <html>
   <head>
     <link href="application.css" rel="stylesheet" />
-    <script type="module" src="/js/chip8.js"></script>
+    <script type="module" src="/application.js"></script>
   </head>
   <body class="flex flex-col items-center bg-black font-mono text-fuchsia-400">
     <h5 class="my-5 text-4xl">Maz's Chip-8 Emul8r</h5>
     <canvas class="rounded-sm border border-fuchsia-400"></canvas>
     <div class="mt-5 flex gap-8">
-      <select class="rounded-xl border border-gray-600 bg-gray-700 p-2.5" autocomplete="off">
+      <select id="rom-select" class="rounded-xl border border-gray-600 bg-gray-700 p-2.5" autocomplete="off">
         <option disabled selected>Select a game...</option>
         <% for (const rom of roms) { %>
           <% if (rom.endsWith(".ch8")) { %>
@@ -16,10 +16,7 @@
           <% } %>
         <% } %>
       </select>
-      <button
-        onclick="loadRom(event)"
-        class="rounded-xl border border-gray-600 bg-gray-700 px-5 py-2.5"
-      >
+      <button onclick="loadROM()" class="rounded-xl border border-gray-600 bg-gray-700 px-5 py-2.5">
         Load
       </button>
     </div>

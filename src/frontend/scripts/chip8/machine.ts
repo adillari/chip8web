@@ -1,7 +1,11 @@
-class CPU {
-  SCREEN: Screen;
+import Display from "./peripherals/display";
+import Keyboard from "./peripherals/keyboard";
+import Speaker from "./peripherals/speaker";
+
+class Machine {
+  DISPLAY: Display;
   KEYBOARD: Keyboard;
-  SPEAKER: speaker;
+  SPEAKER: Speaker;
   MEMORY: Uint8Array;
   V: Uint8Array;
   I: number;
@@ -12,10 +16,10 @@ class CPU {
   PAUSED: boolean;
   SPEED: number;
 
-  constructor(screen: Screen, keyboard: Keyboard, speaker: Speaker) {
-    this.SCREEN = screen;
-    this.KEYBOARD = keyboard;
-    this.SPEAKER = speaker;
+  constructor(displayScale: number = 15) {
+    this.DISPLAY = new Display(displayScale);
+    this.KEYBOARD = new Keyboard();
+    this.SPEAKER = new Speaker();
 
     this.MEMORY = new Uint8Array(4096); // 4KB of memory
     this.V = new Uint8Array(16); // 16 8 bit registers
@@ -28,7 +32,7 @@ class CPU {
     this.PAUSED = false;
     this.SPEED = 6;
 
-    this.#loadHexSpritesIntoRAM();
+    this.loadHexSpritesIntoRAM();
   }
 
   cycle(): void {
@@ -40,11 +44,11 @@ class CPU {
     }
 
     if (!this.PAUSED) {
-      this.#updateTimers();
+      this.updateTimers();
     }
 
-    this.#playSound();
-    this.SCREEN.refresh();
+    this.playSound();
+    this.DISPLAY.refresh();
   }
 
   // assumes the program is coming in as an array of bytes
@@ -54,7 +58,7 @@ class CPU {
     });
   }
 
-  #loadHexSpritesIntoRAM(): void {
+  private loadHexSpritesIntoRAM(): void {
     // prettier-ignore
     const SPRITES = [
       0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
@@ -80,11 +84,7 @@ class CPU {
     });
   }
 
-  //
-  // private
-  //
-
-  executeInstruction(opcode) {
+  private executeInstruction(opcode) {
     this.PC += 2;
 
     let x = (opcode & 0x0f00) >> 8;
@@ -94,7 +94,7 @@ class CPU {
       case 0x0000:
         switch (opcode) {
           case 0x00e0: // CLS
-            this.SCREEN.clear();
+            this.DISPLAY.clear();
             break;
 
           case 0x00ee: // RET
@@ -203,7 +203,7 @@ class CPU {
         break;
 
       case 0xc000: // RND Vx, byte
-        let randomByte = Math.floor(Math.random * 0xff);
+        let randomByte = Math.floor(Math.random() * 0xff);
         this.V[x] = randomByte & (opcode & 0xff);
         break;
 
@@ -215,7 +215,7 @@ class CPU {
           for (let col = 0; col < spriteCols; col++) {
             let bit = (byte >> (7 - col)) & 1; // get working bit
             if (bit) {
-              let erased = this.SCREEN.togglePixel(
+              let erased = this.DISPLAY.togglePixel(
                 this.V[x] + col,
                 this.V[y] + row,
               );
@@ -251,7 +251,7 @@ class CPU {
 
           case 0x0a: // LD Vx, K
             this.PAUSED = true;
-            this.KEYBOARD.onNextKeyPress = (key) => {
+            this.KEYBOARD.onNextKeypress = (key) => {
               this.V[x] = key;
               this.PAUSED = false;
             };
@@ -281,9 +281,9 @@ class CPU {
             break;
 
           case 0x33: // LD B, Vx
-            this.MEMORY[this.I] = parseInt(this.V[x] / 100);
-            this.MEMORY[this.I + 1] = parseInt((this.V[x] % 100) / 10);
-            this.MEMORY[this.I + 2] = parseInt(this.V[x] % 10);
+            this.MEMORY[this.I] = Math.floor(this.V[x] / 100);
+            this.MEMORY[this.I + 1] = Math.floor((this.V[x] % 100) / 10);
+            this.MEMORY[this.I + 2] = Math.floor(this.V[x] % 10);
             break;
 
           case 0x55: // LD [I], Vx
@@ -305,7 +305,7 @@ class CPU {
     }
   }
 
-  #updateTimers() {
+  private updateTimers() {
     if (this.DT > 0) {
       this.DT -= 1;
     }
@@ -314,8 +314,8 @@ class CPU {
     }
   }
 
-  #playSound() {
-    if (this.soundTimer > 0) {
+  private playSound() {
+    if (this.ST > 0) {
       this.SPEAKER.play(440);
     } else {
       this.SPEAKER.stop();
@@ -323,4 +323,4 @@ class CPU {
   }
 }
 
-export default CPU;
+export default Machine;

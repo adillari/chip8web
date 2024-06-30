@@ -24,7 +24,7 @@ class Screen {
     [x, y] = this.normalizePixel(x, y);
     let pixel = x + y * this.COLS;
 
-    this.pixelArr[pixel] = !this.pixelArr[pixel] // flip pixel
+    this.pixelArr[pixel] = !this.pixelArr[pixel]; // flip pixel
 
     return !this.pixelArr[pixel]; // return true if the pixel was erased
   }
