@@ -40,3 +40,5 @@ async function loadROM() {
     requestAnimationFrame(step);
   }
 }
+
+document.getElementById("load-rom-button").addEventListener("click", loadROM);
