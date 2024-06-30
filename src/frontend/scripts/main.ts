@@ -1,5 +1,5 @@
 import Machine from "./chip8/machine";
-const machine: Machine = new Machine();
+let machine: Machine;
 
 let framerate: number = 1000 / 60;
 let elapsed: number;
@@ -36,6 +36,7 @@ async function loadROM() {
   if (arrayBuffer[0] === "error") {
     alert(arrayBuffer[1]);
   } else {
+    machine = new Machine();
     machine.loadProgramIntoRAM(arrayBuffer);
     requestAnimationFrame(step);
   }
