@@ -295,14 +295,28 @@ class Machine {
             break;
 
           case 0x55: // LD [I], Vx
-            for (let registerIndex = 0; registerIndex <= x; registerIndex++) {
-              this.MEMORY[this.I + registerIndex] = this.V[registerIndex];
+            if (this.QUIRKS.incrementIndex) {
+              for (let registerIndex = 0; registerIndex <= x; registerIndex++) {
+                this.MEMORY[this.I] = this.V[registerIndex];
+                this.I += 1;
+              }
+            } else {
+              for (let registerIndex = 0; registerIndex <= x; registerIndex++) {
+                this.MEMORY[this.I + registerIndex] = this.V[registerIndex];
+              }
             }
             break;
 
           case 0x65: // LD Vx. [I]
-            for (let registerIndex = 0; registerIndex <= x; registerIndex++) {
-              this.V[registerIndex] = this.MEMORY[this.I + registerIndex];
+            if (this.QUIRKS.incrementIndex) {
+              for (let registerIndex = 0; registerIndex <= x; registerIndex++) {
+                this.V[registerIndex] = this.MEMORY[this.I];
+                this.I += 1;
+              }
+            } else {
+              for (let registerIndex = 0; registerIndex <= x; registerIndex++) {
+                this.V[registerIndex] = this.MEMORY[this.I + registerIndex];
+              }
             }
             break;
         }

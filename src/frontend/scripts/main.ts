@@ -38,6 +38,7 @@ async function loadROM() {
   } else {
     const quirks: Record<string, boolean> = {
       originalShiftBehavior: true,
+      incrementIndex: true,
     };
     machine = new Machine(quirks);
     machine.loadProgramIntoRAM(arrayBuffer);
