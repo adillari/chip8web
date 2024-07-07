@@ -21,12 +21,10 @@ class Screen {
   }
 
   togglePixel(x, y) {
-    [x, y] = this.normalizePixel(x, y);
     let pixel = x + y * this.COLS;
-
-    this.pixelArr[pixel] = !this.pixelArr[pixel]; // flip pixel
-
-    return !this.pixelArr[pixel]; // return true if the pixel was erased
+    let erased = this.pixelArr[pixel]; // if pixel was already on, erased will be true
+    this.pixelArr[pixel] = !erased; // flip pixel
+    return erased; // return true if erased
   }
 
   clear() {
@@ -53,16 +51,6 @@ class Screen {
         this.canvas.fillRect(x, y, this.SCALE, this.SCALE);
       }
     });
-  }
-
-  // wraps out of bound pixels
-  private normalizePixel(x, y): Array<number> {
-    if (x > this.COLS) x -= this.COLS;
-    if (x < 0) x += this.COLS;
-    if (y > this.ROWS) y -= this.ROWS;
-    if (y < 0) y += this.ROWS;
-
-    return [x, y];
   }
 }
 
