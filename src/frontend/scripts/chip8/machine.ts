@@ -32,7 +32,7 @@ class Machine {
     this.STACK = new Array();
 
     this.PAUSED = false;
-    this.SPEED = 6;
+    this.SPEED = 8;
 
     this.loadHexSpritesIntoRAM();
   }
