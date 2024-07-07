@@ -216,17 +216,34 @@ class Machine {
         break;
 
       case 0xd000: // DRW Vx, Vy, nibble
-        let spriteCols = 8;
-        let spriteRows = opcode & 0xf;
-        for (let row = 0; row < spriteRows; row++) {
-          let byte = this.MEMORY[this.I + row];
-          for (let col = 0; col < spriteCols; col++) {
-            let bit = (byte >> (7 - col)) & 1; // get working bit
-            if (bit) {
-              let erased = this.DISPLAY.togglePixel(
-                this.V[x] + col,
-                this.V[y] + row,
-              );
+        this.V[0xf] = 0; // reset flag register
+        if (this.V[x] > this.DISPLAY.COLS) this.V[x] %= this.DISPLAY.COLS; // normalize starting col
+        if (this.V[y] > this.DISPLAY.ROWS) this.V[y] %= this.DISPLAY.ROWS; // normalize starting row
+
+        const spriteCols = 8; // sprite width
+        const spriteRows = opcode & 0xf; // sprite height
+        let row: number;
+        let byte: number;
+        let col: number;
+        let bit: number;
+        let pixelX: number;
+        let pixelY: number;
+        let erased: boolean;
+
+        // for every sprite byte
+        for (row = 0; row < spriteRows; row++) {
+          byte = this.MEMORY[this.I + row];
+          // for each bit in byte
+          for (col = 0; col < spriteCols; col++) {
+            bit = (byte >> (7 - col)) & 1; // get sprite pixel to toggle
+            pixelX = this.V[x] + col;
+            pixelY = this.V[y] + row;
+            if (
+              bit &&
+              pixelX < this.DISPLAY.COLS &&
+              pixelY < this.DISPLAY.ROWS
+            ) {
+              erased = this.DISPLAY.togglePixel(pixelX, pixelY);
               if (erased) {
                 this.V[0xf] = 1;
               }
