@@ -1,4 +1,4 @@
-class Screen {
+export default class {
   SCALE: number;
   ROWS: number;
   COLS: number;
@@ -53,5 +53,3 @@ class Screen {
     });
   }
 }
-
-export default Screen;

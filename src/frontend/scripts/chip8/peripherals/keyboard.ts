@@ -1,4 +1,4 @@
-class Keyboard {
+export default class {
   KEYMAP: { [key: number]: number };
   keysPressed: boolean[];
   onNextKeypress: null | ((key: number) => void);
@@ -52,5 +52,3 @@ class Keyboard {
     return this.keysPressed[keyCode];
   }
 }
-
-export default Keyboard;

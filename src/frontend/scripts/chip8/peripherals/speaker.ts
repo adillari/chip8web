@@ -1,4 +1,4 @@
-class Speaker {
+export default class {
   audioContext: AudioContext;
   gain;
   finish;
@@ -32,5 +32,3 @@ class Speaker {
     }
   }
 }
-
-export default Speaker;
