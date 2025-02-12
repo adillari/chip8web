@@ -6,8 +6,7 @@
   </head>
   <body class="flex flex-col items-center bg-black font-mono text-fuchsia-400">
     <h5 class="my-5 text-4xl">Maz's Chip-8 Emul8r</h5>
-    <canvas class="rounded-sm border border-fuchsia-400" width="960" height="480"></canvas>
-    <div class="mt-5 flex gap-8">
+    <div class="mb-2.5 flex gap-8 items-center">
       <select id="rom-select" class="rounded-xl border border-gray-600 bg-gray-700 p-2.5" autocomplete="off">
         <option disabled selected>Select a game...</option>
         <% for (const rom of roms) { %>
@@ -16,9 +15,13 @@
           <% } %>
         <% } %>
       </select>
+      <div>OR</div>
+      <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Upload file</label>
+      <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file">
       <button id="load-rom-button" class="rounded-xl border border-gray-600 bg-gray-700 px-5 py-2.5">
         Load
       </button>
     </div>
+    <canvas class="rounded-sm border border-fuchsia-400" width="960" height="480"></canvas>
   </body>
 </html>
